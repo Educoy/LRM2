@@ -1,10 +1,10 @@
 /* Service worker de la app de presupuestos.
-   Guarda una copia de la app en el teléfono para que abra sin señal.
+   Guarda una copia en el teléfono para que abra sin señal.
 
-   IMPORTANTE: cada vez que cambies index.html, súbele el número a VERSION.
-   Si no lo haces, el teléfono va a seguir mostrando la versión vieja. */
+   IMPORTANTE: cada vez que subas un index.html nuevo, súbele el número
+   a VERSION. Si no, los teléfonos seguirán mostrando la versión vieja. */
 
-const VERSION = 'v1';
+const VERSION = 'v5';
 const CACHE   = 'presupuestos-' + VERSION;
 const FUENTES = 'fuentes-' + VERSION;
 
@@ -12,26 +12,25 @@ const ARCHIVOS = [
   './',
   './index.html',
   './manifest.webmanifest',
-  './vendor/html2canvas.min.js',
-  './vendor/jspdf.umd.min.js',
-  './icons/icon-192.png',
-  './icons/icon-512.png',
-  './icons/icon-maskable-512.png',
-  './icons/apple-touch-icon.png',
-  './icons/favicon.png'
+  './html2canvas.min.js',
+  './jspdf.umd.min.js',
+  './icon-192.png',
+  './icon-512.png',
+  './icon-maskable-512.png',
+  './apple-touch-icon.png',
+  './favicon.png'
 ];
 
-/* Instalación: guarda todo lo necesario */
 self.addEventListener('install', e => {
   e.waitUntil(
     caches.open(CACHE)
-      .then(c => c.addAll(ARCHIVOS))
+      /* uno por uno: si falta alguno, los demás se guardan igual */
+      .then(c => Promise.all(ARCHIVOS.map(f => c.add(f).catch(()=>{}))))
       .then(() => self.skipWaiting())
       .catch(() => self.skipWaiting())
   );
 });
 
-/* Activación: borra las copias de versiones anteriores */
 self.addEventListener('activate', e => {
   e.waitUntil(
     caches.keys()
@@ -42,8 +41,7 @@ self.addEventListener('activate', e => {
   );
 });
 
-const esFuente = url =>
-  url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com';
+const esFuente = u => u.hostname === 'fonts.googleapis.com' || u.hostname === 'fonts.gstatic.com';
 
 self.addEventListener('fetch', e => {
   const req = e.request;
@@ -52,7 +50,6 @@ self.addEventListener('fetch', e => {
   let url;
   try{ url = new URL(req.url); }catch(_){ return; }
 
-  /* Fuentes de Google: se guardan la primera vez que hay señal */
   if(esFuente(url)){
     e.respondWith(
       caches.open(FUENTES).then(c =>
@@ -67,7 +64,6 @@ self.addEventListener('fetch', e => {
 
   if(url.origin !== self.location.origin) return;
 
-  /* Navegación: si no hay señal, se abre la copia guardada */
   if(req.mode === 'navigate'){
     e.respondWith(
       fetch(req)
@@ -80,7 +76,6 @@ self.addEventListener('fetch', e => {
     return;
   }
 
-  /* Resto de archivos: primero la copia local, y se refresca de fondo */
   e.respondWith(
     caches.match(req).then(hit => {
       const red = fetch(req).then(res => {

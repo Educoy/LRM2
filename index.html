@@ -7,11 +7,10 @@
 <meta name="description" content="Presupuestos en terreno para servicios de mantención domiciliaria.">
 <link rel="manifest" href="./manifest.webmanifest">
 <meta name="theme-color" content="#1B4494">
-<link rel="icon" href="./icons/favicon.png">
-<link rel="apple-touch-icon" href="./icons/apple-touch-icon.png">
+<link rel="icon" href="./favicon.png">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Presupuestos">
-<meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="mobile-web-app-capable" content="yes">
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
@@ -154,7 +153,33 @@ input::placeholder,textarea::placeholder{color:var(--ink-3)}
 
 /* ---------- líneas ---------- */
 .line{background:var(--card);border:1px solid var(--line);border-radius:4px;padding:11px 12px;margin-bottom:8px}
-.line.srv{border-left:3px solid var(--brand)}
+
+/* tarjeta de servicio: el servicio arriba y sus materiales colgando */
+.srvcard{border:1px solid var(--line);border-left:3px solid var(--brand);border-radius:4px;
+  background:var(--card);padding:11px 12px;margin-bottom:10px}
+.srvcard > .line{background:transparent;border:0;border-radius:0;padding:0;margin:0}
+.submats{margin:10px 0 0 4px;padding:9px 0 0 11px;border-left:1px dashed var(--line)}
+.submats-h{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--ink-3);margin-bottom:7px}
+.submats .line{background:var(--white);padding:9px 10px;margin-bottom:6px}
+.submats .line-name{font-size:13.5px}
+.submats .line-total{font-size:17px}
+.submats .numwrap{flex:1 1 76px}
+.padrewrap{display:flex;align-items:center;gap:8px;margin-bottom:9px}
+.padrewrap > span{flex:0 0 auto;font-size:9px;font-weight:600;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-3)}
+.padresel{flex:1;min-width:0;width:auto;padding:7px 9px;font-size:12.5px;background:var(--white)}
+.addmat{width:100%;padding:9px 10px;background:transparent;border:1px dashed var(--line);
+  border-radius:3px;font-size:12.5px;font-weight:500;color:var(--ink-2);
+  display:flex;align-items:center;justify-content:center;gap:6px}
+.addmat:hover{border-color:var(--brand);color:var(--brand);border-style:solid}
+.addmat svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
+.srvsub{display:flex;justify-content:space-between;align-items:baseline;gap:10px;
+  margin-top:10px;padding-top:8px;border-top:1px solid var(--line);
+  font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3)}
+.srvsub b{font-family:var(--cond);font-size:17px;font-weight:700;letter-spacing:0;
+  color:var(--ink);font-variant-numeric:tabular-nums}
+.buscamat{margin-top:4px}
 .line-top{display:flex;align-items:flex-start;gap:8px;margin-bottom:9px}
 .line-name{flex:1;font-size:14.5px;font-weight:600;line-height:1.3}
 .line-unit{font-size:10.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.08em;font-weight:500;margin-top:2px}
@@ -162,12 +187,13 @@ input::placeholder,textarea::placeholder{color:var(--ink-3)}
   background:transparent;border:1px solid var(--line);border-radius:3px;color:var(--ink-3)}
 .xbtn:hover{color:var(--alert);border-color:var(--alert)}
 .xbtn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round}
-.line-nums{display:flex;align-items:flex-end;gap:8px}
-.numwrap{flex:1;min-width:0}
-.numwrap label{font-size:9.5px;letter-spacing:.1em;margin-bottom:3px}
-.numwrap input{padding:8px 9px;font-size:14px}
+.line-nums{display:flex;align-items:flex-end;gap:8px;flex-wrap:wrap}
+.numwrap{flex:1 1 88px;min-width:0}
+.numwrap label{font-size:9.5px;letter-spacing:.09em;margin-bottom:3px;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.numwrap input{padding:8px 9px;font-size:14px;min-width:0}
 .line-total{font-family:var(--cond);font-size:19px;font-weight:700;font-variant-numeric:tabular-nums;
-  white-space:nowrap;padding-bottom:7px;min-width:82px;text-align:right}
+  white-space:nowrap;padding-bottom:7px;text-align:right;margin-left:auto;flex:0 0 auto}
 
 /* ---------- resumen interno ---------- */
 .calc-row{display:flex;justify-content:space-between;gap:12px;padding:6px 0;font-size:13.5px}
@@ -232,6 +258,16 @@ table.doc-t .tu{font-size:10.5px;color:var(--ink-3);text-transform:uppercase;let
 table.doc-t tr.grp td{font-size:9px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;
   color:var(--brand);padding:12px 0 4px;border-bottom:0}
 table.doc-t tr.grp:first-child td{padding-top:6px}
+/* servicio como ítem, con sus materiales debajo */
+table.doc-t tr.srv-row td{border-bottom:0;padding-bottom:5px}
+table.doc-t tr.srv-row td:first-child{font-weight:600}
+table.doc-t tr.srv-row.fin td{border-bottom:1px solid var(--line-2);padding-bottom:9px}
+table.doc-t tr.mat-row td{border-bottom:0;padding:2px 0;font-size:12px;color:var(--ink-2)}
+table.doc-t tr.mat-row td:first-child{padding-left:10px}
+table.doc-t tr.sub-row td{border-bottom:1px solid var(--line-2);padding:7px 0 10px;
+  font-size:9px;font-weight:600;letter-spacing:.13em;text-transform:uppercase;color:var(--ink-3)}
+table.doc-t tr.sub-row td.r{font-size:12.5px;letter-spacing:0;text-transform:none;
+  color:var(--ink);font-weight:600}
 
 .doc-tot{margin-top:14px;margin-left:auto;width:100%;max-width:290px}
 .doc-tot .tr{display:flex;justify-content:space-between;gap:14px;font-size:13px;padding:5px 0}
@@ -245,19 +281,54 @@ table.doc-t tr.grp:first-child td{padding-top:6px}
 .doc-foot{margin-top:22px;padding-top:14px;border-top:1px solid var(--line-2);
   font-size:11.5px;color:var(--ink-2);line-height:1.65;white-space:pre-wrap}
 
+/* ---------- documento en versión PDF ----------
+   Copia fuera de vista, a ancho de hoja. Tipografías más contenidas y más
+   espacio entre bloques: en papel el aire es lo que se lee como profesional. */
+.pdf-jaula{position:fixed;left:-10000px;top:0;z-index:-1;background:#fff;pointer-events:none}
+.pdf-doc{width:660px;border:0;box-shadow:none;padding:0;background:#fff;line-height:1.55}
+.pdf-doc .doc-logo{width:62px;height:62px}
+.pdf-doc .doc-head{gap:26px;padding-bottom:22px;margin-bottom:28px}
+.pdf-doc .doc-emp{font-size:21px;margin-bottom:8px}
+.pdf-doc .doc-meta{font-size:11px;line-height:1.8}
+.pdf-doc .doc-nlab{font-size:8.5px;letter-spacing:.2em}
+.pdf-doc .doc-n{font-size:22px}
+.pdf-doc .doc-date{font-size:10.5px;line-height:1.75;margin-top:8px}
+.pdf-doc .doc-block{margin-bottom:28px}
+.pdf-doc .doc-lab{font-size:8.5px;letter-spacing:.2em;margin-bottom:8px}
+.pdf-doc .doc-cli{font-size:14px}
+.pdf-doc .doc-cli-x{font-size:11.5px;line-height:1.75}
+.pdf-doc .doc-desc{font-size:12.5px;line-height:1.8}
+.pdf-doc table.doc-t{margin-top:12px}
+.pdf-doc table.doc-t th{font-size:8.5px;letter-spacing:.18em;padding-bottom:10px}
+.pdf-doc table.doc-t td{font-size:12.5px;padding:12px 0}
+.pdf-doc table.doc-t .tu{font-size:9.5px}
+.pdf-doc table.doc-t tr.srv-row td{padding-bottom:7px}
+.pdf-doc table.doc-t tr.srv-row.fin td{padding-bottom:12px}
+.pdf-doc table.doc-t tr.mat-row td{font-size:11.5px;padding:5px 0}
+.pdf-doc table.doc-t tr.mat-row td:first-child{padding-left:18px}
+.pdf-doc table.doc-t tr.sub-row td{font-size:8.5px;letter-spacing:.18em;padding:10px 0 15px}
+.pdf-doc table.doc-t tr.sub-row td.r{font-size:12px}
+.pdf-doc table.doc-t tr.grp td{font-size:8.5px;letter-spacing:.18em;padding:18px 0 7px}
+.pdf-doc .doc-tot{margin-top:22px;max-width:300px}
+.pdf-doc .doc-tot .tr{font-size:12.5px;padding:6px 0}
+.pdf-doc .doc-tot .grand{margin-top:11px;padding-top:13px}
+.pdf-doc .doc-tot .grand .gl{font-size:9.5px;letter-spacing:.2em}
+.pdf-doc .doc-tot .grand .gv{font-size:24px}
+.pdf-doc .doc-foot{margin-top:36px;padding-top:19px;font-size:10.5px;line-height:1.85}
+
 /* ---------- catálogo ---------- */
 .tabs{display:flex;gap:0;border-bottom:1px solid var(--line);margin:0 0 16px}
 .tabs button{flex:1;padding:11px 4px;background:transparent;border:0;border-bottom:2px solid transparent;
   font-family:var(--cond);font-size:15px;font-weight:600;letter-spacing:.07em;
   text-transform:uppercase;color:var(--ink-3)}
 .tabs button[aria-pressed=true]{color:var(--ink);border-bottom-color:var(--hivis-dk)}
-.mat{display:flex;align-items:center;gap:10px;padding:11px 12px;background:var(--card);
+.catrow{display:flex;align-items:center;gap:10px;padding:11px 12px;background:var(--card);
   border:1px solid var(--line);border-radius:4px;margin-bottom:7px}
-.mat.srv{border-left:3px solid var(--brand)}
-.mat-n{flex:1;min-width:0}
-.mat-n b{display:block;font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.mat-n span{font-size:10.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.07em}
-.mat input{width:98px;padding:8px 9px;font-size:14px;text-align:right;font-variant-numeric:tabular-nums}
+.catrow.srv{border-left:3px solid var(--brand)}
+.catrow-n{flex:1;min-width:0}
+.catrow-n b{display:block;font-size:14px;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.catrow-n span{font-size:10.5px;color:var(--ink-3);text-transform:uppercase;letter-spacing:.07em}
+.catrow input{width:98px;padding:8px 9px;font-size:14px;text-align:right;font-variant-numeric:tabular-nums}
 .catname{font-family:var(--cond);font-size:16px;font-weight:600;text-transform:uppercase;
   letter-spacing:.09em;color:var(--ink-2);margin:18px 0 8px}
 .catname:first-child{margin-top:0}
@@ -371,29 +442,39 @@ const SEED_SRV = [
   ['Limpieza de canaletas','Techumbre','m',3500],
 ];
 
-/* plantillas semilla: [nombre, descripción, [[tipo, nombre en catálogo, cantidad], ...]] */
+/* plantillas semilla: [nombre, descripción,
+     [[tipo, nombre en catálogo, cantidad, índice del servicio padre], ...]]
+   El cuarto valor indica de qué línea cuelga el material (null = general). */
 const SEED_PLT = [
   ['Destape de desagüe','Destape de desagüe y revisión del sistema.',
-    [['srv','Visita a domicilio y diagnóstico',1],['srv','Destape de desagüe',1]]],
+    [['srv','Visita a domicilio y diagnóstico',1,null],
+     ['srv','Destape de desagüe',1,null]]],
   ['Cambio de grifería de cocina','Retiro de grifería antigua e instalación de nueva, incluye sellado.',
-    [['srv','Cambio de grifería',1],['mat','Grifería de lavaplatos',1],['mat','Silicona neutra',1]]],
+    [['srv','Cambio de grifería',1,null],
+     ['mat','Grifería de lavaplatos',1,0],
+     ['mat','Silicona neutra',1,0]]],
   ['Pintura de dormitorio 3x3','Sellado y dos manos de pintura en muros y cielo.',
-    [['srv','Pintura de muro o cielo',30],['mat','Sellador de muro',1],['mat','Látex interior',2]]],
+    [['srv','Pintura de muro o cielo',30,null],
+     ['mat','Sellador de muro',1,0],
+     ['mat','Látex interior',2,0]]],
   ['Cerámica en baño 4 m²','Retiro de piso existente, nivelado e instalación de cerámica.',
-    [['srv','Instalación de cerámica',4],['srv','Retiro de escombros',1],
-     ['mat','Cerámica piso',4.4],['mat','Adhesivo cerámico 25 kg',1],
-     ['mat','Fragüe 5 kg',1],['mat','Silicona neutra',1]]],
+    [['srv','Instalación de cerámica',4,null],
+     ['srv','Retiro de escombros',1,null],
+     ['mat','Cerámica piso',4.4,0],
+     ['mat','Adhesivo cerámico 25 kg',1,0],
+     ['mat','Fragüe 5 kg',1,0],
+     ['mat','Silicona neutra',1,0]]],
 ];
 
 const DEF_SET = {
   empresa:'LR Mantenciones Domiciliaria', rut:'', fono:'', correo:'', direccion:'',
-  valorHora:25000, margenDefecto:25, validezDias:14, correlativo:1, logo:true, ver:3,
+  valorHora:25000, margenDefecto:25, validezDias:14, correlativo:1, logo:true, ver:5,
   condiciones:'50% al inicio de la obra y 50% contra entrega.\nPrecios válidos dentro del plazo indicado.'
 };
 
 let S = { ...DEF_SET };
 let MAT = [], SRV = [], PLT = [], DOCS = [];
-let view = { name:'inicio', id:null, search:'', tab:'srv', form:null };
+let view = { name:'inicio', id:null, search:'', tab:'srv', form:null, mtarget:null };
 let ready = false;
 
 /* --------------------------- utilidades --------------------------- */
@@ -578,14 +659,50 @@ function seedFrom(rows){
   return rows.map(([nombre,categoria,unidad,precio]) =>
     ({id:uid(), nombre, categoria, unidad, precio, usos:0}));
 }
+/* Las plantillas guardadas antes de que existiera la jerarquía tienen todos
+   sus materiales sin servicio asignado. Esto las arregla:
+     · si es una de las de ejemplo, se reconstruye desde la definición;
+     · si es propia y tiene UN solo servicio, los materiales van a ese servicio;
+     · si tiene varios servicios, no se adivina: quedan generales y él las
+       reasigna a mano, para no dejarlas mal sin que se dé cuenta. */
+function arreglarPlantillas(){
+  const semillas = {};
+  SEED_PLT.forEach(([nombre, desc, lineas]) => { semillas[nombre] = lineas; });
+  let tocadas = 0;
+
+  PLT.forEach(t => {
+    const ls = t.lineas || [];
+    const mats = ls.filter(l => l.tipo !== 'srv');
+    if(!mats.length) return;
+    const sinJerarquia = mats.every(l => l.padreIdx === null || l.padreIdx === undefined);
+    if(!sinJerarquia) return;                     // ya está bien, no se toca
+
+    const semilla = semillas[t.nombre];
+    if(semilla && semilla.length === ls.length){
+      semilla.forEach((def, k) => {
+        if(ls[k]) ls[k].padreIdx = (def[3] === undefined ? null : def[3]);
+      });
+      tocadas++;
+      return;
+    }
+    const idxSrv = ls.map((l,k) => l.tipo === 'srv' ? k : -1).filter(k => k >= 0);
+    if(idxSrv.length === 1){
+      ls.forEach(l => { if(l.tipo !== 'srv') l.padreIdx = idxSrv[0]; });
+      tocadas++;
+    }
+  });
+  return tocadas;
+}
+
 function seedPlantillas(){
   const byName = (arr,n) => arr.find(x => x.nombre === n);
   return SEED_PLT.map(([nombre,descripcion,lineas]) => ({
     id: uid(), nombre, descripcion,
-    lineas: lineas.map(([tipo,ref,cantidad]) => {
+    lineas: lineas.map(([tipo,ref,cantidad,padreIdx]) => {
       const src = byName(tipo === 'srv' ? SRV : MAT, ref);
       return { tipo, refId: src ? src.id : null, nombre: src ? src.nombre : ref,
-               unidad: src ? src.unidad : 'un', precio: src ? src.precio : 0, cantidad };
+               unidad: src ? src.unidad : 'un', precio: src ? src.precio : 0, cantidad,
+               padreIdx: (padreIdx === undefined ? null : padreIdx) };
     })
   }));
 }
@@ -640,24 +757,34 @@ async function boot(){
   if(!pl)               escribir.push(K.plt);
 
   const versionVieja = s ? s.ver : null;
-  if(!s || versionVieja !== 3){
-    if(versionVieja !== 2 && versionVieja !== 3) S.validezDias = 14;
+  if(!s || versionVieja !== 5){
+    if(!versionVieja || versionVieja < 2) S.validezDias = 14;
     const ivaViejo = !!(s && s.iva === true);
     DOCS.forEach(p => {
       if(p.iva === undefined) p.iva = (versionVieja === 2 ? false : ivaViejo);
       if(p.descuento === undefined) p.descuento = 0;
-      (p.items || []).forEach(i => { if(!i.tipo) i.tipo = 'mat'; });
+      (p.items || []).forEach(i => {
+        if(!i.tipo) i.tipo = 'mat';
+        if(i.padre === undefined) i.padre = null;   // materiales antiguos: generales
+      });
     });
+    PLT.forEach(t => (t.lineas || []).forEach(l => {
+      if(l.padreIdx === undefined) l.padreIdx = null;
+    }));
     delete S.iva;
-    S.ver = 3;
+    S.ver = 5;
     escribir.push(K.set);
+    if(arreglarPlantillas() && escribir.indexOf(K.plt) === -1) escribir.push(K.plt);
     if(DOCS.length) escribir.push(K.doc);
   }
 
   DOCS.forEach(p => {
     if(p.descuento === undefined) p.descuento = 0;
     if(p.iva === undefined) p.iva = false;
-    (p.items || []).forEach(i => { if(!i.tipo) i.tipo = 'mat'; });
+    (p.items || []).forEach(i => {
+      if(!i.tipo) i.tipo = 'mat';
+      if(i.padre === undefined) i.padre = null;
+    });
   });
 
   ready = true;
@@ -739,7 +866,7 @@ const ICO = {
 
 /* --------------------------- navegación --------------------------- */
 function go(name, id){
-  view = { name, id: id ?? null, search:'', tab: view.tab || 'srv', form:null };
+  view = { name, id: id ?? null, search:'', tab: view.tab || 'srv', form:null, mtarget:null };
   window.scrollTo(0,0);
   render();
 }
@@ -805,12 +932,37 @@ function vInicio(){
 }
 
 /* =========================== EDITOR =========================== */
-function lineaHTML(i, ix){
-  return `<div class="line ${i.tipo === 'srv' ? 'srv' : ''}">
+/* Cada material puede colgar de un servicio (campo padre). Los que no
+   cuelgan de ninguno son materiales generales del trabajo. */
+const esSrv = i => i.tipo === 'srv';
+function grupos(p){
+  const items = p.items || [];
+  const srvs = items.filter(esSrv);
+  const mats = items.filter(i => !esSrv(i));
+  const ids  = srvs.map(s => s.id);
+  return {
+    servicios: srvs.map(s => ({srv:s, mats: mats.filter(m => m.padre === s.id)})),
+    generales: mats.filter(m => !m.padre || ids.indexOf(m.padre) === -1)
+  };
+}
+const subSrv = g => num(g.srv.cantidad)*num(g.srv.precio)
+                  + g.mats.reduce((a,m) => a + num(m.cantidad)*num(m.precio), 0);
+
+function lineaHTML(p, i, ix){
+  const srvs = (p.items || []).filter(esSrv);
+  const sel = (!esSrv(i) && srvs.length) ? `<div class="padrewrap">
+      <span>Pertenece a</span>
+      <select class="padresel" data-padre="${ix}" aria-label="Servicio al que pertenece este material">
+        <option value="">Ninguno · material general</option>
+        ${srvs.map(s => `<option value="${s.id}"${i.padre === s.id ? ' selected' : ''}>${esc(s.nombre)}</option>`).join('')}
+      </select>
+    </div>` : '';
+  return `<div class="line ${esSrv(i) ? 'l-srv' : 'l-mat'}">
     <div class="line-top">
       <div class="line-name">${esc(i.nombre)}<div class="line-unit">${esc(i.unidad)}</div></div>
       <button class="xbtn" data-act="del" data-ix="${ix}" aria-label="Quitar ${esc(i.nombre)}">${ICO.x}</button>
     </div>
+    ${sel}
     <div class="line-nums">
       <div class="numwrap"><label for="q${ix}">Cantidad</label>
         <input id="q${ix}" type="number" step="any" min="0" inputmode="decimal" value="${i.cantidad}" data-f="cantidad" data-ix="${ix}"></div>
@@ -820,12 +972,48 @@ function lineaHTML(i, ix){
     </div>
   </div>`;
 }
-function bloqueItems(p, tipo){
-  const ixs = p.items.map((i,ix)=>[i,ix]).filter(([i]) => tipo === 'srv' ? i.tipo === 'srv' : i.tipo !== 'srv');
-  if(!ixs.length) return `<p class="note">${tipo === 'srv' ? 'Sin servicios todavía.' : 'Sin materiales todavía.'}</p>`;
-  return ixs.map(([i,ix]) => lineaHTML(i,ix)).join('');
+
+/* buscador de materiales, apuntando a un servicio o a los generales */
+function buscadorMat(destino){
+  const f = view.form;
+  if(f && f.kind === 'libre' && f.tipo === 'mat' && f.dest === destino) return formLibre('mat', destino);
+  const fr = MAT.slice().sort((a,b)=>(b.usos||0)-(a.usos||0)).filter(m=>(m.usos||0)>0).slice(0,6);
+  return `<div class="buscamat">
+    ${fr.length ? `<div class="chips">${fr.map(m =>
+      `<button class="mchip" data-act="add" data-tipo="mat" data-id="${m.id}" data-dest="${destino}">${esc(m.nombre)}</button>`).join('')}</div>` : ''}
+    <input id="b-mat" type="text" placeholder="Buscar material…" autocomplete="off" data-busca="mat" data-autofocus>
+    <div id="res-mat"></div>
+    <div class="btnrow" style="margin-top:8px">
+      <button class="btn ghost sm" data-act="libre" data-tipo="mat" data-dest="${destino}">${ICO.plus} Material nuevo</button>
+      <button class="btn ghost sm" data-act="mtarget-x">Listo</button>
+    </div>
+  </div>`;
 }
-function formLibre(tipo){
+
+function bloqueServicios(p){
+  const g = grupos(p);
+  if(!g.servicios.length) return `<p class="note">Sin servicios todavía. Búscalo arriba o carga una plantilla.</p>`;
+  return g.servicios.map(gr => `<div class="srvcard">
+      ${lineaHTML(p, gr.srv, p.items.indexOf(gr.srv))}
+      <div class="submats">
+        <div class="submats-h">Materiales de este servicio</div>
+        ${gr.mats.length ? gr.mats.map(m => lineaHTML(p, m, p.items.indexOf(m))).join('')
+                         : `<p class="note" style="margin:0 0 8px">Ninguno todavía.</p>`}
+        ${view.mtarget === gr.srv.id ? buscadorMat(gr.srv.id)
+          : `<button class="addmat" data-act="mtarget" data-id="${gr.srv.id}">${ICO.plus} Agregar material a este servicio</button>`}
+      </div>
+      <div class="srvsub">Subtotal del servicio <b>${fmt(subSrv(gr))}</b></div>
+    </div>`).join('');
+}
+function bloqueGenerales(p){
+  const g = grupos(p);
+  return (g.generales.length
+      ? g.generales.map(m => lineaHTML(p, m, p.items.indexOf(m))).join('')
+      : `<p class="note">Nada por ahora. Aquí van los materiales que no corresponden a un servicio en particular.</p>`)
+    + (view.mtarget === 'general' ? buscadorMat('general')
+      : `<button class="addmat" data-act="mtarget" data-id="general">${ICO.plus} Agregar material general</button>`);
+}
+function formLibre(tipo, dest){
   const unis = tipo === 'srv' ? UNI_SRV : UNI_MAT;
   return `<div class="inline-form">
     <div class="field"><label for="lfn">${tipo === 'srv' ? 'Servicio' : 'Material'}</label>
@@ -840,7 +1028,7 @@ function formLibre(tipo){
       <input type="checkbox" id="lfsave" style="width:auto" checked> Guardar también en mi catálogo
     </label>
     <div class="btnrow">
-      <button class="btn sm" data-act="libre-ok" data-tipo="${tipo}">Agregar</button>
+      <button class="btn sm" data-act="libre-ok" data-tipo="${tipo}" data-dest="${dest || ''}">Agregar</button>
       <button class="btn ghost sm" data-act="form-x">Cancelar</button>
     </div>
   </div>`;
@@ -870,23 +1058,25 @@ function vEditor(){
         `<button class="mchip plt" data-act="usaplt" data-id="${t.id}">${esc(t.nombre)}</button>`).join('')}</div>
     </div>` : '';
 
-  const frec = t => cat(t).slice().sort((a,b)=>(b.usos||0)-(a.usos||0))
+  const frSrv = SRV.slice().sort((a,b)=>(b.usos||0)-(a.usos||0))
     .filter(m=>(m.usos||0)>0).slice(0,6);
 
-  const bloque = (tipo, titulo) => {
-    const fr = frec(tipo);
-    return `<div class="sect">
-      <div class="sect-h">${titulo}</div>
-      ${fr.length ? `<div class="chips">${fr.map(m =>
-        `<button class="mchip" data-act="add" data-tipo="${tipo}" data-id="${m.id}">${esc(m.nombre)}</button>`).join('')}</div>` : ''}
-      <input id="b-${tipo}" type="text" placeholder="Buscar ${tipo === 'srv' ? 'servicio' : 'material'}…" autocomplete="off" data-busca="${tipo}">
-      <div id="res-${tipo}"></div>
-      ${f && f.kind === 'libre' && f.tipo === tipo ? formLibre(tipo) : `<div style="margin:10px 0 12px">
-        <button class="btn ghost sm" data-act="libre" data-tipo="${tipo}">${ICO.plus} Agregar ${tipo === 'srv' ? 'servicio' : 'material'} suelto</button>
+  const secServicios = `<div class="sect">
+      <div class="sect-h">Servicios</div>
+      ${frSrv.length ? `<div class="chips">${frSrv.map(m =>
+        `<button class="mchip" data-act="add" data-tipo="srv" data-id="${m.id}">${esc(m.nombre)}</button>`).join('')}</div>` : ''}
+      <input id="b-srv" type="text" placeholder="Buscar servicio…" autocomplete="off" data-busca="srv">
+      <div id="res-srv"></div>
+      ${f && f.kind === 'libre' && f.tipo === 'srv' ? formLibre('srv','') : `<div style="margin:10px 0 12px">
+        <button class="btn ghost sm" data-act="libre" data-tipo="srv">${ICO.plus} Agregar servicio suelto</button>
       </div>`}
-      <div id="items-${tipo}">${bloqueItems(p, tipo)}</div>
+      <div id="items-srv">${bloqueServicios(p)}</div>
     </div>`;
-  };
+
+  const secGenerales = `<div class="sect">
+      <div class="sect-h">Materiales generales</div>
+      <div id="items-mat">${bloqueGenerales(p)}</div>
+    </div>`;
 
   const moInputs =
     mo.modo === 'hh' ? `<div class="row">
@@ -915,8 +1105,8 @@ function vEditor(){
     </div>
 
     ${plts}
-    ${bloque('srv','Servicios')}
-    ${bloque('mat','Materiales')}
+    ${secServicios}
+    ${secGenerales}
 
     <div class="sect">
       <div class="sect-h">Mano de obra adicional</div>
@@ -1012,19 +1202,19 @@ function refreshTotals(){
 }
 function renderItems(){
   const p = getDoc(view.id); if(!p) return;
-  ['srv','mat'].forEach(t => {
-    const box = document.getElementById('items-'+t);
-    if(box) box.innerHTML = bloqueItems(p, t);
-  });
+  const a = document.getElementById('items-srv'); if(a) a.innerHTML = bloqueServicios(p);
+  const b = document.getElementById('items-mat'); if(b) b.innerHTML = bloqueGenerales(p);
   refreshTotals();
+  const af = document.querySelector('[data-autofocus]'); if(af) af.focus();
 }
 function renderResults(tipo, q){
   const box = document.getElementById('res-'+tipo); if(!box) return;
   const t = norm(q).trim();
   if(!t){ box.innerHTML = ''; return; }
   const hits = cat(tipo).filter(m => norm(m.nombre).includes(t) || norm(m.categoria).includes(t)).slice(0,8);
+  const dest = tipo === 'mat' ? (view.mtarget || 'general') : '';
   box.innerHTML = hits.length
-    ? `<div class="results">${hits.map(m => `<button class="result" data-act="add" data-tipo="${tipo}" data-id="${m.id}">
+    ? `<div class="results">${hits.map(m => `<button class="result" data-act="add" data-tipo="${tipo}" data-id="${m.id}" data-dest="${dest}">
         <span class="rn">${esc(m.nombre)}</span>
         <span class="ru">${esc(m.unidad)}</span>
         <span class="rp">${fmt(m.precio)}</span></button>`).join('')}</div>`
@@ -1037,26 +1227,53 @@ function vDoc(){
   if(!p) return vInicio();
   const c = calc(p);
 
-  const fila = i => `<tr>
-    <td>${esc(i.nombre)}<div class="tu">${esc(i.unidad)}</div></td>
-    <td class="r">${num(i.cantidad).toLocaleString('es-CL')}</td>
-    <td class="r">${fmt(i.pu)}</td>
-    <td class="r">${fmt(i.tot)}</td></tr>`;
-  const grp = t => `<tr class="grp"><td colspan="4">${t}</td></tr>`;
+  const g = grupos(p);
+  const L = {}; c.lines.forEach(l => L[l.id] = l);
+  const cnt = i => num(i.cantidad).toLocaleString('es-CL');
   const extra = () =>
     (c.docMo ? `<tr><td>Mano de obra</td><td class="r">—</td><td class="r">—</td><td class="r">${fmt(c.docMo)}</td></tr>` : '') +
     (c.docGa ? `<tr><td>Gastos generales</td><td class="r">—</td><td class="r">—</td><td class="r">${fmt(c.docGa)}</td></tr>` : '');
 
-  let filas;
+  let filas = '';
   if(p.detallado){
-    const dos = c.linesSrv.length && c.linesMat.length;
-    filas = (c.linesSrv.length ? (dos ? grp('Servicios') : '') + c.linesSrv.map(fila).join('') : '')
-          + (c.linesMat.length ? (dos ? grp('Materiales') : '') + c.linesMat.map(fila).join('') : '')
-          + extra();
+    /* cada servicio como un ítem, con sus materiales colgando debajo */
+    g.servicios.forEach(gr => {
+      const s = L[gr.srv.id];
+      const ms = gr.mats.map(m => L[m.id]).filter(Boolean);
+      const sub = s.tot + ms.reduce((a,x) => a + x.tot, 0);
+      filas += `<tr class="srv-row${ms.length ? '' : ' fin'}">
+        <td>${esc(s.nombre)}<div class="tu">${esc(s.unidad)}</div></td>
+        <td class="r">${cnt(s)}</td><td class="r">${fmt(s.pu)}</td><td class="r">${fmt(s.tot)}</td></tr>`;
+      ms.forEach(x => {
+        filas += `<tr class="mat-row"><td>· ${esc(x.nombre)}</td>
+          <td class="r">${cnt(x)} ${esc(x.unidad)}</td><td class="r">${fmt(x.pu)}</td><td class="r">${fmt(x.tot)}</td></tr>`;
+      });
+      if(ms.length){
+        filas += `<tr class="sub-row"><td colspan="3">Subtotal del servicio</td>
+          <td class="r">${fmt(sub)}</td></tr>`;
+      }
+    });
+    if(g.generales.length){
+      filas += `<tr class="grp"><td colspan="4">Otros materiales</td></tr>`;
+      g.generales.forEach(m => {
+        const x = L[m.id]; if(!x) return;
+        filas += `<tr><td>${esc(x.nombre)}<div class="tu">${esc(x.unidad)}</div></td>
+          <td class="r">${cnt(x)}</td><td class="r">${fmt(x.pu)}</td><td class="r">${fmt(x.tot)}</td></tr>`;
+      });
+    }
+    filas += extra();
   }else{
-    filas = (c.docSrv ? `<tr><td>Servicios</td><td class="r">—</td><td class="r">—</td><td class="r">${fmt(c.docSrv)}</td></tr>` : '')
-          + (c.docMat ? `<tr><td>Suministro de materiales</td><td class="r">—</td><td class="r">—</td><td class="r">${fmt(c.docMat)}</td></tr>` : '')
-          + extra();
+    /* un solo renglón por servicio, con sus materiales incluidos en el precio */
+    g.servicios.forEach(gr => {
+      const s = L[gr.srv.id];
+      const ms = gr.mats.map(m => L[m.id]).filter(Boolean);
+      const sub = s.tot + ms.reduce((a,x) => a + x.tot, 0);
+      filas += `<tr class="srv-row fin"><td>${esc(s.nombre)}${ms.length ? '<div class="tu">materiales incluidos</div>' : ''}</td>
+        <td class="r">${cnt(s)}</td><td class="r">—</td><td class="r">${fmt(sub)}</td></tr>`;
+    });
+    const tg = g.generales.reduce((a,m) => a + (L[m.id] ? L[m.id].tot : 0), 0);
+    if(tg) filas += `<tr><td>Otros materiales</td><td class="r">—</td><td class="r">—</td><td class="r">${fmt(tg)}</td></tr>`;
+    filas += extra();
   }
 
   return topbar('Documento','N° ' + nnn(p.numero), true, '') + `
@@ -1093,14 +1310,14 @@ function vDoc(){
       </div>
     </div>
 
-    <div class="doc-block">
+    ${(p.cliente.nombre || p.cliente.direccion || p.cliente.fono) ? `<div class="doc-block">
       <div class="doc-lab">Cliente</div>
-      <div class="doc-cli">${esc(p.cliente.nombre || '—')}</div>
+      ${p.cliente.nombre ? `<div class="doc-cli">${esc(p.cliente.nombre)}</div>` : ''}
       <div class="doc-cli-x">
         ${p.cliente.direccion ? esc(p.cliente.direccion)+'<br>' : ''}
         ${p.cliente.fono ? esc(p.cliente.fono) : ''}
       </div>
-    </div>
+    </div>` : ''}
 
     ${p.descripcion ? `<div class="doc-block">
       <div class="doc-lab">Trabajo a realizar</div>
@@ -1136,20 +1353,33 @@ function waTexto(p){
   if(p.cliente.direccion) L.push('Dirección: ' + p.cliente.direccion);
   if(p.descripcion){ L.push(''); L.push(p.descripcion); }
   L.push('');
+  const g = grupos(p);
+  const X = {}; c.lines.forEach(l => X[l.id] = l);
+  const cn = i => num(i.cantidad) !== 1 ? ' × ' + num(i.cantidad).toLocaleString('es-CL') + ' ' + i.unidad : '';
+
   if(p.detallado){
-    if(c.linesSrv.length){
-      L.push('*Servicios*');
-      c.linesSrv.forEach(i => L.push('• ' + i.nombre + (num(i.cantidad) !== 1 ? ' × ' + num(i.cantidad).toLocaleString('es-CL') + ' ' + i.unidad : '') + ' — ' + fmt(i.tot)));
+    g.servicios.forEach(gr => {
+      const s = X[gr.srv.id];
+      const ms = gr.mats.map(m => X[m.id]).filter(Boolean);
+      L.push('*' + s.nombre + cn(s) + ' — ' + fmt(s.tot) + '*');
+      ms.forEach(x => L.push('    · ' + x.nombre + cn(x) + ' — ' + fmt(x.tot)));
+      if(ms.length) L.push('    Subtotal del servicio: ' + fmt(s.tot + ms.reduce((a,x)=>a+x.tot,0)));
       L.push('');
-    }
-    if(c.linesMat.length){
-      L.push('*Materiales*');
-      c.linesMat.forEach(i => L.push('• ' + i.nombre + (num(i.cantidad) !== 1 ? ' × ' + num(i.cantidad).toLocaleString('es-CL') + ' ' + i.unidad : '') + ' — ' + fmt(i.tot)));
+    });
+    if(g.generales.length){
+      L.push('*Otros materiales*');
+      g.generales.forEach(m => { const x = X[m.id]; if(x) L.push('• ' + x.nombre + cn(x) + ' — ' + fmt(x.tot)); });
       L.push('');
     }
   }else{
-    if(c.docSrv) L.push('• Servicios — ' + fmt(c.docSrv));
-    if(c.docMat) L.push('• Suministro de materiales — ' + fmt(c.docMat));
+    g.servicios.forEach(gr => {
+      const s = X[gr.srv.id];
+      const ms = gr.mats.map(m => X[m.id]).filter(Boolean);
+      const sub = s.tot + ms.reduce((a,x)=>a+x.tot,0);
+      L.push('• ' + s.nombre + (ms.length ? ' (materiales incluidos)' : '') + ' — ' + fmt(sub));
+    });
+    const tg = g.generales.reduce((a,m)=>a+(X[m.id]?X[m.id].tot:0),0);
+    if(tg) L.push('• Otros materiales — ' + fmt(tg));
     L.push('');
   }
   if(c.docMo) L.push('• Mano de obra — ' + fmt(c.docMo));
@@ -1164,18 +1394,29 @@ function waTexto(p){
   return L.join('\n');
 }
 
-const CDN_H2C   = './vendor/html2canvas.min.js';
-const CDN_JSPDF = './vendor/jspdf.umd.min.js';
+/* Las librerías del PDF se buscan primero en el propio sitio (funciona sin
+   señal) y, si no están, se bajan de internet. Así la app sirve igual en los
+   dos casos. */
+const SRC_H2C = ['./html2canvas.min.js',
+                 'https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js'];
+const SRC_JSPDF = ['./jspdf.umd.min.js',
+                   'https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js'];
 
-function cargarScript(src, listo){
-  if(listo()) return Promise.resolve();
+function unScript(src){
   return new Promise((res, rej) => {
     const s = document.createElement('script');
     s.src = src;
-    s.onload = () => listo() ? res() : rej(new Error('no cargó'));
-    s.onerror = () => rej(new Error('sin red'));
+    s.onload = res;
+    s.onerror = () => rej(new Error('falló ' + src));
     document.head.appendChild(s);
   });
+}
+async function cargarScript(fuentes, listo){
+  if(listo()) return;
+  for(const src of fuentes){
+    try{ await unScript(src); if(listo()) return; }catch(e){ /* prueba la siguiente */ }
+  }
+  throw new Error('no se pudo cargar la librería');
 }
 function bajarBlob(blob, nombre){
   try{
@@ -1192,43 +1433,63 @@ function nombrePDF(p){
   return 'Presupuesto-' + nnn(p.numero) + (cli ? '-' + cli : '') + '.pdf';
 }
 
-/* Documento -> PDF tamaño carta A4, cortado en páginas si es largo */
+/* Documento -> PDF A4.
+   No se captura lo que está en pantalla: se hace una copia fuera de vista con
+   ancho de hoja y su propio espaciado. Si se capturara la pantalla del celular
+   (~440 px) y luego se estirara a 180 mm, todo saldría casi 2,5 veces más
+   grande de lo que corresponde. */
+const PDF_ANCHO  = 660;   // px de la copia
+const PDF_MARGEN = 15;    // mm de margen en la hoja
+
 async function generarPDF(){
-  await cargarScript(CDN_H2C,   () => !!window.html2canvas);
-  await cargarScript(CDN_JSPDF, () => !!(window.jspdf && window.jspdf.jsPDF));
+  await cargarScript(SRC_H2C,   () => !!window.html2canvas);
+  await cargarScript(SRC_JSPDF, () => !!(window.jspdf && window.jspdf.jsPDF));
 
-  const el = document.getElementById('docPaper');
-  const cv = await window.html2canvas(el, {
-    scale: 2, backgroundColor:'#ffffff', useCORS:true, logging:false,
-    windowWidth: el.scrollWidth
-  });
+  const orig = document.getElementById('docPaper');
+  if(!orig) throw new Error('sin documento');
 
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF({unit:'mm', format:'a4', orientation:'portrait'});
-  const PW = pdf.internal.pageSize.getWidth();
-  const PH = pdf.internal.pageSize.getHeight();
-  const M  = 12;
-  const w  = PW - M*2;
-  const h  = cv.height * w / cv.width;
+  const jaula = document.createElement('div');
+  jaula.className = 'pdf-jaula';
+  const clon = orig.cloneNode(true);
+  clon.removeAttribute('id');
+  clon.classList.add('pdf-doc');
+  jaula.appendChild(clon);
+  document.body.appendChild(jaula);
 
-  if(h <= PH - M*2){
-    pdf.addImage(cv.toDataURL('image/jpeg', 0.94), 'JPEG', M, M, w, h);
-  }else{
-    const altoPx = Math.floor((PH - M*2) * cv.width / w);
-    let y = 0, primera = true;
-    while(y < cv.height){
-      const corte = Math.min(altoPx, cv.height - y);
-      const c2 = document.createElement('canvas');
-      c2.width = cv.width; c2.height = corte;
-      const ctx = c2.getContext('2d');
-      ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, c2.width, c2.height);
-      ctx.drawImage(cv, 0, y, cv.width, corte, 0, 0, cv.width, corte);
-      if(!primera) pdf.addPage();
-      pdf.addImage(c2.toDataURL('image/jpeg', 0.94), 'JPEG', M, M, w, corte * w / cv.width);
-      primera = false; y += corte;
+  try{
+    const cv = await window.html2canvas(clon, {
+      scale: 2.5, backgroundColor:'#ffffff', useCORS:true, logging:false
+    });
+
+    const { jsPDF } = window.jspdf;
+    const pdf = new jsPDF({unit:'mm', format:'a4', orientation:'portrait'});
+    const PW = pdf.internal.pageSize.getWidth();
+    const PH = pdf.internal.pageSize.getHeight();
+    const M  = PDF_MARGEN;
+    const w  = PW - M*2;
+    const h  = cv.height * w / cv.width;
+
+    if(h <= PH - M*2){
+      pdf.addImage(cv.toDataURL('image/jpeg', 0.95), 'JPEG', M, M, w, h);
+    }else{
+      const altoPx = Math.floor((PH - M*2) * cv.width / w);
+      let y = 0, primera = true;
+      while(y < cv.height){
+        const corte = Math.min(altoPx, cv.height - y);
+        const c2 = document.createElement('canvas');
+        c2.width = cv.width; c2.height = corte;
+        const ctx = c2.getContext('2d');
+        ctx.fillStyle = '#ffffff'; ctx.fillRect(0, 0, c2.width, c2.height);
+        ctx.drawImage(cv, 0, y, cv.width, corte, 0, 0, cv.width, corte);
+        if(!primera) pdf.addPage();
+        pdf.addImage(c2.toDataURL('image/jpeg', 0.95), 'JPEG', M, M, w, corte * w / cv.width);
+        primera = false; y += corte;
+      }
     }
+    return pdf.output('blob');
+  }finally{
+    jaula.remove();
   }
-  return pdf.output('blob');
 }
 
 async function enviarPDF(p, soloDescargar){
@@ -1282,8 +1543,8 @@ function vCat(){
   </div>`;
 
   if(tab === 'plt'){
-    const list = PLT.length ? PLT.map(t => `<div class="mat">
-        <div class="mat-n"><b>${esc(t.nombre)}</b><span>${t.lineas.length} ítem(s)</span></div>
+    const list = PLT.length ? PLT.map(t => `<div class="catrow">
+        <div class="catrow-n"><b>${esc(t.nombre)}</b><span>${t.lineas.length} ítem(s)</span></div>
         <button class="xbtn" data-act="delplt" data-id="${t.id}" aria-label="Eliminar ${esc(t.nombre)}">${ICO.x}</button>
       </div>`).join('')
       : `<p class="note">No hay plantillas. Se crean desde un presupuesto, con el botón "Guardar como plantilla".</p>`;
@@ -1325,8 +1586,8 @@ function catListHTML(){
     const g = list.filter(m => m.categoria === c);
     if(!g.length) return;
     html += `<div class="catname">${esc(c)}</div>`;
-    html += g.map(m => `<div class="mat ${tab==='srv'?'srv':''}">
-      <div class="mat-n"><b>${esc(m.nombre)}</b><span>${esc(m.unidad)}</span></div>
+    html += g.map(m => `<div class="catrow ${tab==='srv'?'srv':''}">
+      <div class="catrow-n"><b>${esc(m.nombre)}</b><span>${esc(m.unidad)}</span></div>
       <input type="number" step="1" min="0" inputmode="numeric" value="${m.precio}" data-cat="${tab}" data-id="${m.id}" aria-label="Precio de ${esc(m.nombre)}">
       <button class="xbtn" data-act="delcat" data-tipo="${tab}" data-id="${m.id}" aria-label="Eliminar ${esc(m.nombre)}">${ICO.x}</button>
     </div>`).join('');
@@ -1334,8 +1595,8 @@ function catListHTML(){
   const otras = list.filter(m => !cats.includes(m.categoria));
   if(otras.length){
     html += `<div class="catname">Sin categoría</div>`;
-    html += otras.map(m => `<div class="mat ${tab==='srv'?'srv':''}">
-      <div class="mat-n"><b>${esc(m.nombre)}</b><span>${esc(m.unidad)}</span></div>
+    html += otras.map(m => `<div class="catrow ${tab==='srv'?'srv':''}">
+      <div class="catrow-n"><b>${esc(m.nombre)}</b><span>${esc(m.unidad)}</span></div>
       <input type="number" step="1" min="0" inputmode="numeric" value="${m.precio}" data-cat="${tab}" data-id="${m.id}">
       <button class="xbtn" data-act="delcat" data-tipo="${tab}" data-id="${m.id}">${ICO.x}</button>
     </div>`).join('');
@@ -1419,7 +1680,7 @@ function vSet(){
 /* --------------------- respaldo --------------------- */
 function respaldoJSON(){
   return JSON.stringify({
-    app:'presupuestos', ver:3, fecha:new Date().toISOString(),
+    app:'presupuestos', ver:5, fecha:new Date().toISOString(),
     settings:S, materiales:MAT, servicios:SRV, plantillas:PLT, presupuestos:DOCS
   }, null, 2);
 }
@@ -1451,9 +1712,13 @@ async function restaurar(texto){
   DOCS.forEach(p => {
     if(p.descuento === undefined) p.descuento = 0;
     if(p.iva === undefined) p.iva = false;
-    (p.items || []).forEach(i => { if(!i.tipo) i.tipo = 'mat'; });
+    (p.items || []).forEach(i => {
+      if(!i.tipo) i.tipo = 'mat';
+      if(i.padre === undefined) i.padre = null;
+    });
   });
-  S.ver = 3;
+  arreglarPlantillas();
+  S.ver = 5;
   await saveNow(K.set, K.mat, K.srv, K.plt, K.doc);
   toast('Respaldo restaurado');
   go('inicio');
@@ -1502,16 +1767,25 @@ document.addEventListener('click', e => {
   if(b.dataset.tab){ view.tab = b.dataset.tab; view.search = ''; return render(); }
 
   /* ítems */
+  if(act === 'mtarget'){ view.mtarget = b.dataset.id; view.form = null; return render(); }
+  if(act === 'mtarget-x'){ view.mtarget = null; view.form = null; return render(); }
+
   if(act === 'add' && p){
     const tipo = b.dataset.tipo;
     const m = cat(tipo).find(x => x.id === b.dataset.id); if(!m) return;
-    p.items.push({id:uid(), tipo, refId:m.id, nombre:m.nombre, unidad:m.unidad, cantidad:1, precio:m.precio});
+    const dest = b.dataset.dest || '';
+    const padre = (tipo === 'mat' && dest && dest !== 'general') ? dest : null;
+    p.items.push({id:uid(), tipo, refId:m.id, nombre:m.nombre, unidad:m.unidad, cantidad:1, precio:m.precio, padre});
     m.usos = (m.usos||0) + 1;
     const bs = document.getElementById('b-'+tipo); if(bs){ bs.value=''; renderResults(tipo,''); }
     queueSave(K.doc, tipo === 'srv' ? K.srv : K.mat);
     renderItems(); toast(m.nombre + ' agregado'); return;
   }
-  if(act === 'libre'){ view.form = {kind:'libre', tipo:b.dataset.tipo}; return render(); }
+  if(act === 'libre'){
+    view.form = {kind:'libre', tipo:b.dataset.tipo, dest:b.dataset.dest || 'general'};
+    if(b.dataset.dest) view.mtarget = b.dataset.dest;
+    return render();
+  }
   if(act === 'form-x'){ view.form = null; return render(); }
   if(act === 'libre-ok' && p){
     const tipo = b.dataset.tipo;
@@ -1525,25 +1799,53 @@ document.addEventListener('click', e => {
       cat(tipo).push(nuevo); refId = nuevo.id;
       queueSave(tipo === 'srv' ? K.srv : K.mat);
     }
-    p.items.push({id:uid(), tipo, refId, nombre, unidad, cantidad:1, precio});
+    const dest = b.dataset.dest || '';
+    const padre = (tipo === 'mat' && dest && dest !== 'general') ? dest : null;
+    p.items.push({id:uid(), tipo, refId, nombre, unidad, cantidad:1, precio, padre});
     view.form = null; queueSave(K.doc); render(); toast(nombre + ' agregado'); return;
   }
   if(act === 'del' && p){
-    p.items.splice(parseInt(b.dataset.ix,10), 1);
+    const it = p.items[parseInt(b.dataset.ix,10)]; if(!it) return;
+    if(esSrv(it)){
+      const hijos = p.items.filter(m => m.padre === it.id);
+      if(hijos.length && !confirm('"' + it.nombre + '" tiene ' + hijos.length +
+         ' material(es) asociados.\n\n¿Eliminar el servicio junto con sus materiales?')) return;
+      p.items = p.items.filter(m => m !== it && m.padre !== it.id);
+      if(view.mtarget === it.id) view.mtarget = null;
+      queueSave(K.doc); return render();
+    }
+    p.items = p.items.filter(m => m !== it);
     queueSave(K.doc); renderItems(); return;
   }
 
   /* plantillas */
   if(act === 'usaplt' && p){
     const t = PLT.find(x => x.id === b.dataset.id); if(!t) return;
-    t.lineas.forEach(l => {
+    /* primera pasada: crear los ítems. Segunda: colgar cada material
+       de su servicio, usando los ids nuevos. */
+    const nuevos = t.lineas.map(l => {
       const src = l.refId ? cat(l.tipo).find(x => x.id === l.refId) : null;
-      p.items.push({id:uid(), tipo:l.tipo, refId:l.refId || null,
+      return {id:uid(), tipo:l.tipo, refId:l.refId || null,
         nombre: src ? src.nombre : l.nombre,
         unidad: src ? src.unidad : l.unidad,
         cantidad: l.cantidad,
-        precio: src ? src.precio : l.precio});
+        precio: src ? src.precio : l.precio,
+        padre: null};
     });
+    /* si la plantilla no dice a qué servicio va un material y hay un único
+       servicio, se cuelga de ese: es lo que se espera siempre */
+    const unicoSrv = (() => {
+      const ix = t.lineas.map((l,k) => l.tipo === 'srv' ? k : -1).filter(k => k >= 0);
+      return ix.length === 1 ? ix[0] : null;
+    })();
+    t.lineas.forEach((l, k) => {
+      let pi = l.padreIdx;
+      if((pi === null || pi === undefined) && l.tipo !== 'srv') pi = unicoSrv;
+      if(pi !== null && pi !== undefined && nuevos[pi] && nuevos[pi].tipo === 'srv'){
+        nuevos[k].padre = nuevos[pi].id;
+      }
+    });
+    nuevos.forEach(it => p.items.push(it));
     if(!p.descripcion && t.descripcion) p.descripcion = t.descripcion;
     queueSave(K.doc); render();
     toast('Plantilla "' + t.nombre + '" cargada'); return;
@@ -1552,9 +1854,11 @@ document.addEventListener('click', e => {
   if(act === 'plt-ok' && p){
     const nombre = document.getElementById('pfn').value.trim();
     if(!nombre){ toast('Ponle un nombre a la plantilla'); return; }
+    const idx = {}; p.items.forEach((i,k) => { idx[i.id] = k; });
     PLT.push({ id:uid(), nombre, descripcion:p.descripcion || '',
       lineas: p.items.map(i => ({tipo:i.tipo, refId:i.refId || null, nombre:i.nombre,
-                                 unidad:i.unidad, precio:i.precio, cantidad:i.cantidad})) });
+        unidad:i.unidad, precio:i.precio, cantidad:i.cantidad,
+        padreIdx: (i.padre !== null && i.padre !== undefined && idx[i.padre] !== undefined) ? idx[i.padre] : null })) });
     view.form = null; queueSave(K.plt); render();
     toast('Plantilla "' + nombre + '" guardada'); return;
   }
@@ -1644,6 +1948,11 @@ document.addEventListener('input', e => {
     queueSave(K.set); return;
   }
   if(!p) return;
+  if(el.dataset.padre !== undefined){
+    const i = p.items[parseInt(el.dataset.padre,10)];
+    if(i){ i.padre = el.value || null; queueSave(K.doc); renderItems(); }
+    return;
+  }
   if(el.dataset.cli){ p.cliente[el.dataset.cli] = el.value; queueSave(K.doc); return; }
   if(el.dataset.p){
     const k = el.dataset.p;
@@ -1660,8 +1969,7 @@ document.addEventListener('input', e => {
 
 boot();
 
-/* Service worker: permite abrir la app sin señal.
-   Solo funciona sobre https (GitHub Pages) o localhost. */
+/* Service worker: permite abrir la app sin señal (solo sobre https). */
 if('serviceWorker' in navigator && location.protocol === 'https:'){
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js', {scope:'./'}).catch(()=>{});

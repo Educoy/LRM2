@@ -1,103 +1,114 @@
 # Presupuestos · LR Mantenciones Domiciliaria
 
-App de presupuestos en terreno. Funciona sin señal y se instala en la pantalla
-de inicio del celular como cualquier otra app.
+App de presupuestos en terreno. Se instala en la pantalla de inicio del celular
+y funciona sin señal.
 
 ---
 
-## Cómo publicarla en GitHub Pages
+## Qué subir
 
-### 1. Crear la cuenta y el repositorio
-
-1. Entra a **github.com** y crea una cuenta si no tienes.
-2. Arriba a la derecha, botón **+** → **New repository**.
-3. Llénalo así:
-   - **Repository name:** `presupuestos`
-   - Marca **Public** (Pages gratis solo funciona con repositorios públicos)
-   - **No** marques "Add a README file"
-4. Botón **Create repository**.
-
-### 2. Subir los archivos
-
-1. En la página del repositorio vacío, haz clic en **uploading an existing file**.
-2. Arrastra **todo el contenido** de esta carpeta. Importante: los archivos y las
-   carpetas `icons` y `vendor`, no la carpeta que los contiene.
-3. Abajo, botón verde **Commit changes**.
-
-Al terminar, el repositorio debe verse así:
+**Los 11 archivos van sueltos, en la raíz del repositorio. No hay carpetas.**
 
 ```
 index.html
 manifest.webmanifest
 sw.js
+html2canvas.min.js
+jspdf.umd.min.js
+icon-192.png
+icon-512.png
+icon-maskable-512.png
+apple-touch-icon.png
+favicon.png
 LEEME.md
-icons/
-  icon-192.png
-  icon-512.png
-  icon-maskable-512.png
-  apple-touch-icon.png
-  favicon.png
-vendor/
-  html2canvas.min.js
-  jspdf.umd.min.js
 ```
 
-### 3. Encender GitHub Pages
+Si ya subiste una versión anterior, sube estos encima: los que se repiten se
+reemplazan solos.
 
-1. Pestaña **Settings** (arriba, en el repositorio).
+---
+
+## Pasos
+
+### 1. Subir los archivos
+
+1. Entra a tu repositorio en GitHub.
+2. Botón **Add file** → **Upload files**.
+3. Selecciona los 11 archivos y arrástralos.
+4. Abajo, botón verde **Commit changes**.
+
+### 2. Encender GitHub Pages
+
+Si aún no lo hiciste:
+
+1. Pestaña **Settings**.
 2. Menú izquierdo → **Pages**.
-3. En **Branch**, elige `main` y carpeta `/ (root)`. Botón **Save**.
-4. Espera uno o dos minutos y recarga. Va a aparecer la dirección:
+3. En **Branch** elige `main` y carpeta `/ (root)` → **Save**.
+4. Espera uno o dos minutos y recarga la página. Va a aparecer tu dirección.
+
+Con un repositorio llamado `LRM2` y usuario `Educoy`, la dirección queda:
 
 ```
-https://TU-USUARIO.github.io/presupuestos/
+https://educoy.github.io/LRM2/
 ```
 
-Esa es la dirección de tu app. Guárdala.
-
-### 4. Instalarla en el celular
+### 3. Instalarla en el celular
 
 **Android (Chrome):** abre la dirección → menú de tres puntos →
-**Instalar aplicación** o **Agregar a pantalla principal**.
+**Instalar aplicación**.
 
-**iPhone (Safari):** abre la dirección → botón de compartir (el cuadrado con la
-flecha) → **Agregar a pantalla de inicio**.
+**iPhone (Safari):** abre la dirección → botón de compartir → **Agregar a
+pantalla de inicio**.
 
-Queda con el logo, se abre a pantalla completa y funciona sin señal.
+---
+
+## Cómo saber si quedó bien
+
+Abre la dirección en el computador y revisa:
+
+- **Se ve la app** con el fondo cuadriculado → `index.html` está bien.
+- **Abre un presupuesto → Ver documento → Descargar PDF.** Si baja el PDF,
+  las dos librerías están bien.
+- **En el celular aparece la opción de instalar.** Si no aparece, falta alguno
+  de los iconos o el `manifest.webmanifest`.
 
 ---
 
 ## Cosas importantes
 
 **Cada dispositivo guarda sus propios datos.** El celular y el computador no se
-sincronizan. Para pasar datos de uno a otro: en Ajustes → Respaldo →
-**Descargar respaldo**, y en el otro dispositivo **Restaurar**.
+sincronizan. Para pasar datos de uno a otro: Ajustes → Respaldo → **Descargar
+respaldo**, y en el otro dispositivo **Restaurar**.
 
 **Haz respaldos.** Si borras los datos del navegador o desinstalas la app,
-pierdes todo. Descarga el respaldo cada cierto tiempo y guárdalo en tu correo.
+pierdes todo. Guarda el respaldo en tu correo cada cierto tiempo.
 
-**El repositorio es público.** Cualquiera con la dirección puede abrir la app,
-pero **no** puede ver tus presupuestos: esos quedan solo en tu teléfono, nunca
-se suben a GitHub. Eso sí, no pongas datos privados dentro del código.
+**El repositorio es público, tus presupuestos no.** Los datos quedan solo en tu
+teléfono, nunca se suben a GitHub. Cualquiera con la dirección puede abrir la
+app vacía, nadie puede ver tu información.
 
 ---
 
-## Cuando quieras actualizar la app
+## Cuando actualices la app
 
-1. Abre `sw.js` en GitHub y súbele el número a la línea:
+1. Abre `sw.js` en GitHub (clic en el archivo → ícono del lápiz).
+2. Cambia el número de versión:
    ```js
-   const VERSION = 'v1';   →   const VERSION = 'v2';
+   const VERSION = 'v5';   →   const VERSION = 'v6';
    ```
-2. Sube el `index.html` nuevo.
+3. **Commit changes**.
+4. Sube el `index.html` nuevo.
 
-Si no cambias el `VERSION`, los teléfonos que ya la tienen instalada van a
-seguir mostrando la versión vieja, porque usan la copia guardada.
+Si no cambias el `VERSION`, los teléfonos que ya tienen la app instalada van a
+seguir mostrando la versión vieja, porque usan su copia guardada.
 
 ---
 
 ## Detalles técnicos
 
-- Un solo archivo `index.html`, sin compilación ni dependencias que instalar.
-- `html2canvas` y `jsPDF` van incluidos en `vendor/` para generar el PDF sin
-  necesidad de internet.
+- Un solo `index.html` sin compilación ni dependencias que instalar.
+- `html2canvas` y `jsPDF` van incluidos para generar el PDF sin internet. Si
+  faltaran, la app los baja de un CDN mientras haya señal.
 - Los datos se guardan en el almacenamiento del navegador del dispositivo.
+- Todas las rutas son relativas, así que funciona en cualquier nombre de
+  repositorio sin cambiar nada.
